@@ -787,18 +787,153 @@
     <!-- Use pre and code elements to wrap your code -->
     <!-- The class "language-xyz" specifies the language of the code -->
   <pre><code class="language-javascript">
-function helloWorld() {
-  console.log("Hello, world!");
+//TOWER OF HANOI
+    #include <stdio.h>
+
+void towerOfHanoi(int n, char from_rod, char to_rod, char aux_rod) {
+    if (n == 1) {
+        printf("\\n Move disk 1 from rod %c to rod %c", from_rod, to_rod);
+        return;
+    }
+    towerOfHanoi(n-1, from_rod, aux_rod, to_rod);
+    printf("\\n Move disk %d from rod %c to rod %c", n, from_rod, to_rod);
+    towerOfHanoi(n-1, aux_rod, to_rod, from_rod);
 }
+
+int main() {
+    int n = 4;  // Number of disks
+    towerOfHanoi(n, 'A', 'C', 'B');  // A, B and C are names of rods
+    return 0;
+}
+
       </code></pre>
   </p>
   <p>
     <!-- Use pre and code elements to wrap your code -->
     <!-- The class "language-xyz" specifies the language of the code -->
   <pre><code class="language-javascript">
-function helloWorld() {
-  console.log("Hello, world!");
+//QUEUW LINKED LIST
+    #include <stdio.h>
+#include <stdlib.h>
+
+// Define structure for queue node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Define structure for queue
+struct Queue {
+    struct Node *front, *rear;
+};
+
+// Function to create a new node
+struct Node* newNode(int data) {
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    temp->data = data;
+    temp->next = NULL;
+    return temp;
 }
+
+// Function to create a new queue
+struct Queue* createQueue() {
+    struct Queue* queue = (struct Queue*)malloc(sizeof(struct Queue));
+    queue->front = queue->rear = NULL;
+    return queue;
+}
+
+// Function to check if the queue is empty
+int isEmpty(struct Queue* queue) {
+    return (queue->front == NULL);
+}
+
+// Function to enqueue an element
+void enqueue(struct Queue* queue, int data) {
+    // Create a new node
+    struct Node* temp = newNode(data);
+
+    // If queue is empty, update front and rear
+    if (queue->rear == NULL) {
+        queue->front = queue->rear = temp;
+        return;
+    }
+
+    // Add the new node at the end of queue and update rear
+    queue->rear->next = temp;
+    queue->rear = temp;
+}
+
+// Function to dequeue an element
+void dequeue(struct Queue* queue) {
+    // If queue is empty, return
+    if (isEmpty(queue)) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    // Store previous front and move front one node ahead
+    struct Node* temp = queue->front;
+    queue->front = queue->front->next;
+
+    // If front becomes NULL, update rear as NULL
+    if (queue->front == NULL)
+        queue->rear = NULL;
+
+    printf("Element deleted from queue is : %d\n", temp->data);
+    free(temp);
+}
+
+// Function to display all elements of queue
+void display(struct Queue* queue) {
+    // If queue is empty, return
+    if (isEmpty(queue)) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    // Traverse the queue and print all elements
+    struct Node* temp = queue->front;
+    printf("Queue elements are:\n");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    // Create an empty queue
+    struct Queue* queue = createQueue();
+
+    int choice, data;
+    while (1) {
+        printf("1. Insert element to queue\n");
+        printf("2. Delete element from queue\n");
+        printf("3. Display all elements of queue\n");
+        printf("4. Quit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                printf("Input the element for insertion in queue: ");
+                scanf("%d", &data);
+                enqueue(queue, data);
+                break;
+            case 2:
+                dequeue(queue);
+                break;
+            case 3:
+                display(queue);
+                break;
+            case 4:
+                return 0;
+            default:
+                printf("Wrong choice\n");
+        }
+    }
+    return 0;
+}
+
       </code></pre>
   </p>
   <p>
