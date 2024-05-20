@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+  int info;
+  struct node *link;
+};
+
+struct node *start = NULL;
+
+struct node *insert_beg(struct node *start, int item)
+{
+  struct node *new1 = (struct node *)malloc(sizeof(struct node));
+  new1->info = item;
+  new1->link = start;
+  start = new1;
+  return start;
+}
+
+struct node *insert_end(struct node *start, int item)
+{
+  struct node *new1, *ptr;
+  new1 = (struct node *)malloc(sizeof(struct node));
+  new1->info = item;
+  new1->link = NULL;
+  if (start == NULL)
+  {
+    start = new1;
+  }
+  else
+  {
+    ptr = start;
+    while (ptr->link != NULL)
+    {
+      ptr = ptr->link;
+    }
+    ptr->link = new1;
+  }
+  return start;
+}
+
+struct node *delete_beg(struct node *start)
+{
+  struct node *ptr;
+  if (start == NULL)
+  {
+    printf("Underflow\\n");
+    return start;
+  }
+  else
+  {
+    ptr = start;
+    start = start->link;
+    free(ptr);
+  }
+  return start;
+}
+
+struct node *delete_end(struct node *start)
+{
+  struct node *ptr, *preptr;
+  if (start == NULL)
+  {
+    printf("Underflow\\n");
+    return start;
+  }
+  else if (start->link == NULL)
+  {
+    free(start);
+    start = NULL;
+  }
+  else
+  {
+    ptr = start;
+    while (ptr->link != NULL)
+    {
+      preptr = ptr;
+      ptr = ptr->link;
+    }
+    preptr->link = NULL;
+    free(ptr);
+  }
+  return start;
+}
+
+void traverse(struct node *start)
+{
+  struct node *ptr;
+  if (start == NULL)
+  {
+    printf("Linked list is empty\\n");
+  }
+  else
+  {
+    ptr = start;
+    while (ptr != NULL)
+    {
+      printf("%d ", ptr->info);
+      ptr = ptr->link;
+    }
+    printf("\\n");
+  }
+}
+
+int main()
+{
+  int choice, item;
+  while (1)
+  {
+    printf("1.Insert at beginning\\n");
+    printf("2.Insert at end\\n");
+    printf("3.Delete from beginning\\n");
+    printf("4.Delete from end\\n");
+    printf("5.Traverse\\n");
+    printf("6.Exit\\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice)
+    {
+    case 1:
+      printf("Enter the item to be inserted: ");
+      scanf("%d", &item);
+      start = insert_beg(start, item);
+      break;
+    case 2:
+      printf("Enter the item to be inserted: ");
+      scanf("%d", &item);
+      start = insert_end(start, item);
+      break;
+    case 3:
+      start = delete_beg(start);
+      break;
+    case 4:
+      start = delete_end(start);
+      break;
+    case 5:
+      traverse(start);
+      break;
+    case 6:
+      exit(0);
+    default:
+      printf("Invalid choice\\n");
+    }
+  }
+}

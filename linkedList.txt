@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+  int data;
+  struct Node *next;
+};
+
+int main()
+{
+
+  struct Node head, one, two, three;
+
+  head.data = 0;
+  one.data = 10;
+  two.data = 14;
+  three.data = 16;
+
+  head.next = &one;
+  one.next = &two;
+  two.next = &three;
+  three.next = NULL;
+
+  struct Node *current = &head;
+  while (current != NULL)
+  {
+    printf("%d --", current->next->data);
+    current = current->next;
+  }
+  printf("NULL\n");
+
+  return 0;
+}
+
+void peep(struct Node *head)
+{
+}

@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void push(int stack[], int maxstack, int *top, int item)
+{
+  if (*top == maxstack - 1)
+  {
+    printf("OVERFLOW\\n");
+  }
+  else
+  {
+    *top = *top + 1;
+    stack[*top] = item;
+  }
+}
+
+void peep(int stack[], int *top)
+{
+  if (*top == -1)
+  {
+    printf("STACK IS EMPTY\\n");
+  }
+  else
+  {
+    printf("%d\\n", stack[*top]);
+  }
+}
+
+void pop(int stack[], int *top)
+{
+  if (*top == -1)
+  {
+    printf("STACK IS EMPTY\\n");
+  }
+  else
+  {
+    printf("Popped element: %d\\n", stack[*top]);
+    *top = *top - 1;
+  }
+}
+
+int main()
+{
+  int stack[100] = {};
+  int maxstack = 100;
+  int top = -1;
+  int choice, item;
+
+  while (1)
+  {
+    printf("1. Push\\n");
+    printf("2. Pop\\n");
+    printf("3. Peep\\n");
+    printf("4. Exit\\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice)
+    {
+    case 1:
+      printf("Enter the item to be pushed: ");
+      scanf("%d", &item);
+      push(stack, maxstack, &top, item);
+      break;
+    case 2:
+      pop(stack, &top);
+      break;
+    case 3:
+      peep(stack, &top);
+      break;
+    case 4:
+      exit(0);
+    default:
+      printf("Invalid choice\\n");
+    }
+  }
+
+  return 0;
+}

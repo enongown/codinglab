@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+  int info;
+  struct node *link;
+};
+
+struct node *start = NULL;
+
+struct node *insertbeg(struct node *start, int item)
+{
+  struct node *newnode = (struct node *)malloc(sizeof(struct node));
+  newnode->info = item;
+  newnode->link = start;
+  start = newnode;
+  return start;
+}
+
+int main()
+{
+  start = insertbeg(start, 5);
+  start = insertbeg(start, 90);
+
+  if (start != NULL)
+    printf("First item in the list is %d\n", start->info);
+  else
+    printf("List is empty\n");
+
+  return 0;
+}

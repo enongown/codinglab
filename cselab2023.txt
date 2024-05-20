@@ -1,0 +1,14 @@
+#include <stdio.h>
+
+int main()
+{
+  // Declaring and initializing a string
+  char str[] = "Hello, World!";
+  printf("String: %s\n", str);
+
+  // Declaring and initializing a character array
+  char charArray[] = {'H', 'e', 'l', 'l', 'o', '\0'};
+  printf("Character Array: %s\n", charArray);
+
+  return 0;
+}

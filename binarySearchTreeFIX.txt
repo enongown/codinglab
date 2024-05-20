@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+  struct node *right;
+  int info;
+  struct node *left;
+};
+
+struct node *loc, *par;
+
+struct node *find(struct node *root, int item)
+{
+  struct node *save, *ptr;
+
+  if (root == NULL)
+  {
+    loc = NULL;
+    par = NULL;
+    return root;
+  }
+  if (item == root->info)
+  {
+    loc = root;
+    par = NULL;
+    return root;
+  }
+  if (item < root->info)
+  {
+    save = root;
+    ptr = root->left;
+  }
+  else
+  {
+    save = root;
+    ptr = root->right;
+  }
+  while (ptr != NULL)
+  {
+    if (item == ptr->info)
+    {
+      loc = ptr;
+      ptr = save;
+      return root;
+    }
+    else if (item < ptr->info)
+    {
+      save = ptr;
+      ptr = ptr->left;
+    }
+    else
+    {
+      save = ptr;
+      ptr = ptr->right;
+    }
+  }
+  loc = NULL;
+  par = save;
+  return root;
+}
+
+struct node *insertbst(struct node *root, int item)
+{
+  struct node *new1;
+  root = find(root, item);
+  if (loc != NULL)
+  {
+    printf("\nItem already exists.\n");
+    return root;
+  }
+  new1 = (struct node *)malloc(sizeof(struct node));
+
+  new1->info = item;
+  new1->left = NULL;
+  new1->right = NULL;
+  if (par == NULL)
+  {
+    root = new1;
+  }
+  else if (item < par->info)
+  {
+    par->left = new1;
+  }
+  else
+  {
+    par->right = new1;
+  }
+  return root;
+}
+
+void inorder(struct node *root)
+{
+  if (root != NULL)
+  {
+    inorder(root->left);
+    printf("%d\n", root->info);
+    inorder(root->right);
+  }
+}
+
+int main()
+{
+  struct node *root = NULL;
+  int item, x = 1;
+  while (x == 1 || x == 2 || x == 3)
+  {
+    printf("\n1 --> Insert\n2 --> Traverse\n");
+    scanf("%d", &x);
+    switch (x)
+    {
+    case 1:
+      printf("\nEnter the item: ");
+      scanf("%d", &item);
+      root = insertbst(root, item);
+      break;
+    case 2:
+      inorder(root);
+      break;
+    case 3:
+      printf("\nEnter the item: ");
+      scanf("%d", &item);
+      delete ();
+    }
+  }
+
+  return 0;
+}

@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main()
+{
+  int array[100];
+  int *p;
+  p = array;
+  int i = 0;
+  while (i < 4)
+  {
+    scanf("%d", p + i);
+    i++;
+  }
+
+  printf("----------------------------\n");
+  i = 0;
+
+  while (i < 4)
+  {
+    printf("%d \n", *(p + i));
+    i++;
+  }
+}

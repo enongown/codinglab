@@ -1,0 +1,205 @@
+#include <stdio.h>
+#include <conio.h>
+#include <stdlib.h>
+
+struct node
+{
+  struct node *right;
+  int info;
+  struct node *left;
+};
+
+struct node *loc, *par, *child, *save, *ptr, *suc, *parsuc;
+struct node *find(struct node *root, int item)
+{
+  struct node *save, *ptr;
+
+  if (root == NULL)
+  {
+    loc = NULL;
+    par = NULL;
+    return (root);
+  }
+  if (item == root->info)
+  {
+    loc = root;
+    par = NULL;
+    return (root);
+  }
+  if (item < root->info)
+  {
+    save = root;
+    ptr = root->left;
+  }
+  else
+  {
+    save = root;
+    ptr = root->right;
+  }
+  while (ptr != NULL)
+  {
+    if (item == ptr->info)
+    {
+      loc = ptr;
+      ptr = save;
+      return (root);
+    }
+    else if (item < ptr->info)
+    {
+      save = ptr;
+      ptr = ptr->left;
+    }
+    else
+    {
+      save = ptr;
+      ptr = ptr->right;
+    }
+  }
+  loc = NULL;
+  par = save;
+  return (root);
+}
+
+struct node *insertbst(struct node *root, int item)
+{
+  struct node *new1;
+  root = find(root, item);
+  if (loc != NULL)
+  {
+    printf("\n item already exist");
+    return (root);
+  }
+  new1 = (struct node *)malloc(sizeof(struct node));
+
+  new1->info = item;
+  new1->left = NULL;
+  new1->right = NULL;
+  if (par == NULL)
+  {
+    root = new1;
+  }
+  else if (item < par->info)
+  {
+    par->left = new1;
+  }
+  else
+  {
+    par->right = new1;
+  }
+  return (root);
+}
+
+// deletion
+void deletionbst(struct node *root, int item)
+{
+  loc = find(root, item);
+  if (loc == NULL)
+  {
+    printf("item doesnt exist \n");
+  }
+  else if (loc->left != NULL && loc->right != NULL)
+  {
+    caseB(root, par);
+  }
+  else
+  {
+    caseA(root, par);
+  }
+  free(loc->left);
+}
+
+void caseA(root)
+{
+  if (loc->left == NULL && loc->right == NULL)
+  {
+    child = NULL;
+  }
+  else if (loc->left != NULL)
+  {
+    child = loc->left;
+  }
+  else
+  {
+    child = loc->right;
+  }
+
+  if (par != NULL)
+  {
+    if (loc == par->left)
+    {
+      par->left = child;
+    }
+    else
+    {
+      root = child;
+    }
+  }
+  return 0;
+}
+
+void caseB(root)
+{
+  save = loc;
+  ptr = loc->right;
+  while (ptr->left != NULL)
+  {
+    save = ptr;
+    ptr = ptr->left;
+  }
+  suc = ptr;
+  parsuc = save;
+  caseA(root, suc, parsuc);
+  if (par != NULL)
+  {
+    if (loc = par->left)
+    {
+      par->left = suc;
+    }
+    else
+    {
+      par->right = suc;
+    }
+  }
+  else
+  {
+    root = suc;
+  }
+  suc->left = loc->left;
+  loc->right = loc->right;
+  free(loc);
+}
+
+// deleteion
+void inorder(struct node *root)
+{
+  if (root != NULL)
+  {
+    inorder(root->left);
+    printf("%d \n", root->info);
+    inorder(root->right);
+  }
+}
+
+main()
+{
+  struct node *root = NULL;
+  int item, x = 1;
+  while (x == 1 || x == 2 || x == 3)
+  {
+    printf("\n 1-->insert \n 2--> traverse \n");
+    scanf("%d", &x);
+    switch (x)
+    {
+    case 1:
+      printf("\n enter the item");
+      scanf("%d", &item);
+      root = insertbst(root, item);
+      break;
+    case 2:
+      inorder(root);
+      break;
+    }
+  }
+
+  return 0;
+}

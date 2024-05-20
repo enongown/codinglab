@@ -1,0 +1,43 @@
+#include <stdio.h>
+
+void insertion(int numbers[], int loc, int data, int arrayLength)
+{
+  loc = loc - 1;
+  for (int i = arrayLength; i >= loc; i--)
+  {
+    numbers[i + 1] = numbers[i];
+  }
+  numbers[loc] = data;
+}
+
+int main()
+{
+  int numbers[100];
+  int n;
+  int loc;
+  int data;
+
+  printf("Enter the length of list:\n");
+  scanf("%d", &n);
+  printf("Now enter the numbers:\n");
+
+  for (int i = 0; i < n; i++)
+  {
+    scanf("%d", &numbers[i]);
+  }
+
+  printf("Enter the location where you want to insert the new number:\n");
+  scanf("%d", &loc);
+
+  printf("Enter the  new number:\n");
+  scanf("%d", &data);
+
+  // INSERTION
+  insertion(numbers, loc, data, n);
+  n = n + 1;
+
+  for (int i = 0; i < n; i++)
+  {
+    printf("%d  ", numbers[i]);
+  }
+}
