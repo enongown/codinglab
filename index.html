@@ -1,5 +1,6 @@
 <html>
 <pre>
+  BINARY SEARCH TREE
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -205,8 +206,212 @@ int main()
 }
     
 </pre>
-<pre>
+    QUICSORT 
 
+    #include <stdio.h>
+
+// Function to swap two elements
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// Function to partition the array on the basis of pivot element
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];  // pivot
+    int i = (low - 1);  // Index of smaller element
+
+    for (int j = low; j <= high - 1; j++) {
+        // If current element is smaller than or equal to pivot
+        if (arr[j] <= pivot) {
+            i++;  // increment index of smaller element
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+
+// Function to implement QuickSort
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        // partitionIndex is partitioning index, arr[partitionIndex] is now at right place
+        int partitionIndex = partition(arr, low, high);
+
+        // Separately sort elements before partition and after partition
+        quickSort(arr, low, partitionIndex - 1);
+        quickSort(arr, partitionIndex + 1, high);
+    }
+}
+
+// Function to print an array
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+// Driver program to test above functions
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    printf("Unsorted array: ");
+    printArray(arr, n);
+    quickSort(arr, 0, n - 1);
+    printf("Sorted array: ");
+    printArray(arr, n);
+    return 0;
+}
+<pre>
+LINKED LIST
+  #include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+  int info;
+  struct node *link;
+};
+
+struct node *start = NULL;
+
+struct node *insert_beg(struct node *start, int item)
+{
+  struct node *new1 = (struct node *)malloc(sizeof(struct node));
+  new1->info = item;
+  new1->link = start;
+  start = new1;
+  return start;
+}
+
+struct node *insert_end(struct node *start, int item)
+{
+  struct node *new1, *ptr;
+  new1 = (struct node *)malloc(sizeof(struct node));
+  new1->info = item;
+  new1->link = NULL;
+  if (start == NULL)
+  {
+    start = new1;
+  }
+  else
+  {
+    ptr = start;
+    while (ptr->link != NULL)
+    {
+      ptr = ptr->link;
+    }
+    ptr->link = new1;
+  }
+  return start;
+}
+
+struct node *delete_beg(struct node *start)
+{
+  struct node *ptr;
+  if (start == NULL)
+  {
+    printf("Underflow\\n");
+    return start;
+  }
+  else
+  {
+    ptr = start;
+    start = start->link;
+    free(ptr);
+  }
+  return start;
+}
+
+struct node *delete_end(struct node *start)
+{
+  struct node *ptr, *preptr;
+  if (start == NULL)
+  {
+    printf("Underflow\\n");
+    return start;
+  }
+  else if (start->link == NULL)
+  {
+    free(start);
+    start = NULL;
+  }
+  else
+  {
+    ptr = start;
+    while (ptr->link != NULL)
+    {
+      preptr = ptr;
+      ptr = ptr->link;
+    }
+    preptr->link = NULL;
+    free(ptr);
+  }
+  return start;
+}
+
+void traverse(struct node *start)
+{
+  struct node *ptr;
+  if (start == NULL)
+  {
+    printf("Linked list is empty\\n");
+  }
+  else
+  {
+    ptr = start;
+    while (ptr != NULL)
+    {
+      printf("%d ", ptr->info);
+      ptr = ptr->link;
+    }
+    printf("\\n");
+  }
+}
+
+int main()
+{
+  int choice, item;
+  while (1)
+  {
+    printf("1.Insert at beginning\\n");
+    printf("2.Insert at end\\n");
+    printf("3.Delete from beginning\\n");
+    printf("4.Delete from end\\n");
+    printf("5.Traverse\\n");
+    printf("6.Exit\\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
+
+    switch (choice)
+    {
+    case 1:
+      printf("Enter the item to be inserted: ");
+      scanf("%d", &item);
+      start = insert_beg(start, item);
+      break;
+    case 2:
+      printf("Enter the item to be inserted: ");
+      scanf("%d", &item);
+      start = insert_end(start, item);
+      break;
+    case 3:
+      start = delete_beg(start);
+      break;
+    case 4:
+      start = delete_end(start);
+      break;
+    case 5:
+      traverse(start);
+      break;
+    case 6:
+      exit(0);
+    default:
+      printf("Invalid choice\\n");
+    }
+  }
+}
     
 </pre>
     <pre>
