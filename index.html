@@ -11,88 +11,72 @@
     <!-- Use pre and code elements to wrap your code -->
     <!-- The class "language-xyz" specifies the language of the code -->
   <pre><code class="language-javascript">
-    //QUEUE ARRAY
+    //BFS
     #include <stdio.h>
-      #define MAX_SIZE 100
-      
-      int queue[MAX_SIZE];
-      int front = -1;
-      int rear = -1;
-      
-      void enqueue(int data)
+
+#define MAX 10
+
+int queue[MAX], front = 0, rear = 0;
+
+void enqueue(int value)
+{
+  queue[rear++] = value;
+}
+
+int dequeue()
+{
+  return queue[front++];
+}
+
+void BFS(int graph[MAX][MAX], int visited[MAX], int start, int n)
+{
+  enqueue(start);
+  visited[start] = 1;
+
+  while (front < rear)
+  {
+    int current = dequeue();
+    printf("%d ", current);
+
+    for (int i = 0; i < n; i++)
+    {
+      if (graph[current][i] == 1 && visited[i] == 0)
       {
-        if (rear == MAX_SIZE - 1)
-        {
-          printf("Queue is full\n");
-        }
-        else
-        {
-          if (front == -1)
-            front = 0;
-          rear++;
-          queue[rear] = data;
-        }
+        enqueue(i);
+        visited[i] = 1;
       }
-      
-      void dequeue()
-      {
-        if (front == -1 || front > rear)
-        {
-          printf("Queue is empty\n");
-        }
-        else
-        {
-          printf("Element deleted from queue is : %d\n", queue[front]);
-          front++;
-        }
-      }
-      
-      void display()
-      {
-        if (front == -1)
-          printf("Queue is empty\n");
-        else
-        {
-          printf("Queue elements are :\n");
-          for (int i = front; i <= rear; i++)
-            printf("%d ", queue[i]);
-          printf("\n");
-        }
-      }
-      
-      int main()
-      {
-        int choice, data;
-        while (1)
-        {
-          printf("1. Insert element to queue \n");
-          printf("2. Delete element from queue \n");
-          printf("3. Display all elements of queue \n");
-          printf("4. Quit \n");
-          printf("Enter your choice : ");
-          scanf("%d", &choice);
-          switch (choice)
-          {
-          case 1:
-            printf("Input the element for insertion in queue : ");
-            scanf("%d", &data);
-            enqueue(data);
-            break;
-          case 2:
-            dequeue();
-            break;
-          case 3:
-            display();
-            break;
-          case 4:
-            return 0;
-          default:
-            printf("Wrong choice\n");
-          }
-        }
-        return 0;
-      }
-      
+    }
+  }
+}
+
+int main()
+{
+  int n;
+  printf("Enter number of nodes: ");
+  scanf("%d", &n);
+
+  int graph[MAX][MAX];
+  int visited[MAX] = {0};
+
+  printf("Enter adjacency matrix:\n");
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = 0; j < n; j++)
+    {
+      scanf("%d", &graph[i][j]);
+    }
+  }
+
+  int start;
+  printf("Enter starting node: ");
+  scanf("%d", &start);
+
+  printf("BFS traversal starting from node %d:\n", start);
+  BFS(graph, visited, start, n);
+
+  return 0;
+}
+
         </code></pre>
   </p>
 
@@ -103,210 +87,35 @@
   <pre><code class="language-javascript">
 //BINARY SEARCH TREE
 #include <stdio.h>
-  #include <conio.h>
-  #include <stdlib.h>
-  
-  struct node
+int binarySearch(int nums[], int lb, int ub, int target)
+{
+
+  int mid = (lb + ub) / 2;
+  if (nums[mid] == target)
   {
-    struct node *right;
-    int info;
-    struct node *left;
-  };
-  
-  struct node *loc, *par, *child, *save, *ptr, *suc, *parsuc;
-  struct node *find(struct node *root, int item)
+    return mid;
+  }
+  else
   {
-    struct node *save, *ptr;
-  
-    if (root == NULL)
+    if (nums[mid] < target)
     {
-      loc = NULL;
-      par = NULL;
-      return (root);
-    }
-    if (item == root->info)
-    {
-      loc = root;
-      par = NULL;
-      return (root);
-    }
-    if (item < root->info)
-    {
-      save = root;
-      ptr = root->left;
+      binarySearch(nums, mid + 1, ub, target);
     }
     else
     {
-      save = root;
-      ptr = root->right;
-    }
-    while (ptr != NULL)
-    {
-      if (item == ptr->info)
-      {
-        loc = ptr;
-        ptr = save;
-        return (root);
-      }
-      else if (item < ptr->info)
-      {
-        save = ptr;
-        ptr = ptr->left;
-      }
-      else
-      {
-        save = ptr;
-        ptr = ptr->right;
-      }
-    }
-    loc = NULL;
-    par = save;
-    return (root);
-  }
-  
-  struct node *insertbst(struct node *root, int item)
-  {
-    struct node *new1;
-    root = find(root, item);
-    if (loc != NULL)
-    {
-      printf("\n item already exist");
-      return (root);
-    }
-    new1 = (struct node *)malloc(sizeof(struct node));
-  
-    new1->info = item;
-    new1->left = NULL;
-    new1->right = NULL;
-    if (par == NULL)
-    {
-      root = new1;
-    }
-    else if (item < par->info)
-    {
-      par->left = new1;
-    }
-    else
-    {
-      par->right = new1;
-    }
-    return (root);
-  }
-  
-  // deletion
-  void deletionbst(struct node *root, int item)
-  {
-    loc = find(root, item);
-    if (loc == NULL)
-    {
-      printf("item doesnt exist \n");
-    }
-    else if (loc->left != NULL && loc->right != NULL)
-    {
-      caseB(root, par);
-    }
-    else
-    {
-      caseA(root, par);
-    }
-    free(loc->left);
-  }
-  
-  void caseA(root)
-  {
-    if (loc->left == NULL && loc->right == NULL)
-    {
-      child = NULL;
-    }
-    else if (loc->left != NULL)
-    {
-      child = loc->left;
-    }
-    else
-    {
-      child = loc->right;
-    }
-  
-    if (par != NULL)
-    {
-      if (loc == par->left)
-      {
-        par->left = child;
-      }
-      else
-      {
-        root = child;
-      }
-    }
-    return 0;
-  }
-  
-  void caseB(root)
-  {
-    save = loc;
-    ptr = loc->right;
-    while (ptr->left != NULL)
-    {
-      save = ptr;
-      ptr = ptr->left;
-    }
-    suc = ptr;
-    parsuc = save;
-    caseA(root, suc, parsuc);
-    if (par != NULL)
-    {
-      if (loc = par->left)
-      {
-        par->left = suc;
-      }
-      else
-      {
-        par->right = suc;
-      }
-    }
-    else
-    {
-      root = suc;
-    }
-    suc->left = loc->left;
-    loc->right = loc->right;
-    free(loc);
-  }
-  
-  // deleteion
-  void inorder(struct node *root)
-  {
-    if (root != NULL)
-    {
-      inorder(root->left);
-      printf("%d \n", root->info);
-      inorder(root->right);
+      binarySearch(nums, lb, mid - 1, target);
     }
   }
-  
-  main()
-  {
-    struct node *root = NULL;
-    int item, x = 1;
-    while (x == 1 || x == 2 || x == 3)
-    {
-      printf("\n 1-->insert \n 2--> traverse \n");
-      scanf("%d", &x);
-      switch (x)
-      {
-      case 1:
-        printf("\n enter the item");
-        scanf("%d", &item);
-        root = insertbst(root, item);
-        break;
-      case 2:
-        inorder(root);
-        break;
-      }
-    }
-  
-    return 0;
-  }
+}
+
+int main()
+{
+  int nums[] = {5, 7, 8, 9, 10, 11, 12, 15};
+
+  int foundNum = binarySearch(nums, 0, 7, 11);
+  printf("The required no. is at position: %d", foundNum);
+}
+
       </code></pre>
   </p>
 
@@ -315,373 +124,322 @@
     <!-- Use pre and code elements to wrap your code -->
     <!-- The class "language-xyz" specifies the language of the code -->
   <pre><code class="language-javascript">
-//LINKED LIST 
-#include <stdio.h>
-  #include <stdlib.h>
-  
-  struct node
-  {
-    int info;
-    struct node *link;
-  };
-  
-  struct node *start = NULL;
-  
-  struct node *insert_beg(struct node *start, int item)
-  {
-    struct node *new1 = (struct node *)malloc(sizeof(struct node));
-    new1->info = item;
-    new1->link = start;
-    start = new1;
-    return start;
-  }
-  
-  struct node *insert_end(struct node *start, int item)
-  {
-    struct node *new1, *ptr;
-    new1 = (struct node *)malloc(sizeof(struct node));
-    new1->info = item;
-    new1->link = NULL;
-    if (start == NULL)
-    {
-      start = new1;
-    }
-    else
-    {
-      ptr = start;
-      while (ptr->link != NULL)
-      {
-        ptr = ptr->link;
-      }
-      ptr->link = new1;
-    }
-    return start;
-  }
-  
-  struct node *delete_beg(struct node *start)
-  {
-    struct node *ptr;
-    if (start == NULL)
-    {
-      printf("Underflow\\n");
-      return start;
-    }
-    else
-    {
-      ptr = start;
-      start = start->link;
-      free(ptr);
-    }
-    return start;
-  }
-  
-  struct node *delete_end(struct node *start)
-  {
-    struct node *ptr, *preptr;
-    if (start == NULL)
-    {
-      printf("Underflow\\n");
-      return start;
-    }
-    else if (start->link == NULL)
-    {
-      free(start);
-      start = NULL;
-    }
-    else
-    {
-      ptr = start;
-      while (ptr->link != NULL)
-      {
-        preptr = ptr;
-        ptr = ptr->link;
-      }
-      preptr->link = NULL;
-      free(ptr);
-    }
-    return start;
-  }
-  
-  void traverse(struct node *start)
-  {
-    struct node *ptr;
-    if (start == NULL)
-    {
-      printf("Linked list is empty\\n");
-    }
-    else
-    {
-      ptr = start;
-      while (ptr != NULL)
-      {
-        printf("%d ", ptr->info);
-        ptr = ptr->link;
-      }
-      printf("\\n");
-    }
-  }
-  
-  int main()
-  {
-    int choice, item;
-    while (1)
-    {
-      printf("1.Insert at beginning\\n");
-      printf("2.Insert at end\\n");
-      printf("3.Delete from beginning\\n");
-      printf("4.Delete from end\\n");
-      printf("5.Traverse\\n");
-      printf("6.Exit\\n");
-      printf("Enter your choice: ");
-      scanf("%d", &choice);
-  
-      switch (choice)
-      {
-      case 1:
-        printf("Enter the item to be inserted: ");
-        scanf("%d", &item);
-        start = insert_beg(start, item);
-        break;
-      case 2:
-        printf("Enter the item to be inserted: ");
-        scanf("%d", &item);
-        start = insert_end(start, item);
-        break;
-      case 3:
-        start = delete_beg(start);
-        break;
-      case 4:
-        start = delete_end(start);
-        break;
-      case 5:
-        traverse(start);
-        break;
-      case 6:
-        exit(0);
-      default:
-        printf("Invalid choice\\n");
-      }
-    }
-  }
-  
-      </code></pre>
-  </p>
-  <p>
-    <!-- Use pre and code elements to wrap your code -->
-    <!-- The class "language-xyz" specifies the language of the code -->
-  <pre><code class="language-javascript">
-    //STACK ARRAY
-    #include <stdio.h>
-      #include <stdlib.h>
-      
-      void push(int stack[], int maxstack, int *top, int item)
-      {
-        if (*top == maxstack - 1)
-        {
-          printf("OVERFLOW\\n");
-        }
-        else
-        {
-          *top = *top + 1;
-          stack[*top] = item;
-        }
-      }
-      
-      void peep(int stack[], int *top)
-      {
-        if (*top == -1)
-        {
-          printf("STACK IS EMPTY\\n");
-        }
-        else
-        {
-          printf("%d\\n", stack[*top]);
-        }
-      }
-      
-      void pop(int stack[], int *top)
-      {
-        if (*top == -1)
-        {
-          printf("STACK IS EMPTY\\n");
-        }
-        else
-        {
-          printf("Popped element: %d\\n", stack[*top]);
-          *top = *top - 1;
-        }
-      }
-      
-      int main()
-      {
-        int stack[100] = {};
-        int maxstack = 100;
-        int top = -1;
-        int choice, item;
-      
-        while (1)
-        {
-          printf("1. Push\\n");
-          printf("2. Pop\\n");
-          printf("3. Peep\\n");
-          printf("4. Exit\\n");
-          printf("Enter your choice: ");
-          scanf("%d", &choice);
-      
-          switch (choice)
-          {
-          case 1:
-            printf("Enter the item to be pushed: ");
-            scanf("%d", &item);
-            push(stack, maxstack, &top, item);
-            break;
-          case 2:
-            pop(stack, &top);
-            break;
-          case 3:
-            peep(stack, &top);
-            break;
-          case 4:
-            exit(0);
-          default:
-            printf("Invalid choice\\n");
-          }
-        }
-      
-        return 0;
-      }
-      
-      </code></pre>
-  </p>
-  <p>
-    <!-- Use pre and code elements to wrap your code -->
-    <!-- The class "language-xyz" specifies the language of the code -->
-  <pre><code class="language-javascript">
-//BUBBLE SORT
-#include <stdio.h>
-  int main()
-  {
-    int nums[10] = {3, 9, 1, 0, 2, 7, 12, 10, 11, 4};
-    int n = 10;
-    for (int i = 0; i <= n; i++)
-    {
-      for (int j = 0; j <= n; j++)
-      {
-        if (nums[j] > nums[j + 1])
-        {
-          // swap
-          int tmp = nums[j];
-          nums[j] = nums[j + 1];
-          nums[j + 1] = tmp;
-          j + 1;
-        }
-        else
-        {
-          j + 1;
-        }
-      }
-    }
-  
-    //----------------------------------
-    for (int i = 0; i < n; i++)
-    {
-      printf("%d  ", nums[i]);
-    }
-  }
-      </code></pre>
-  </p>
-  <p>
-    <!-- Use pre and code elements to wrap your code -->
-    <!-- The class "language-xyz" specifies the language of the code -->
-  <pre><code class="language-javascript">
-//ARRAY deletion
-#include <stdio.h>
-  // deletion function
-  void deletion(int numbers[], int loc, int arrayLength)
-  {
-    loc = loc - 1;
-    for (int i = loc; i <= arrayLength - 1; i++)
-    {
-      numbers[i] = numbers[i + 1];
-    }
-  }
-  
-  int main()
-  {
-  
-    int numbers[100];
-    int n;
-    int loc;
-    printf("Enter the length of list:\n");
-    scanf("%d", &n);
-    printf("Now enter the numbers:\n");
-  
-    for (int i = 0; i < n; i++)
-    {
-      scanf("%d", &numbers[i]);
-    }
-  
-    printf("Enter the index of the value to delete\n");
-    scanf("%d", &loc);
-    deletion(numbers, loc, n);
-    n = n - 1;
-  
-    for (int i = 0; i < n; i++)
-    {
-      printf("%d  ", numbers[i]);
-    }
-  }
-  
-      </code></pre>
-  </p>
-  <p>
-    <!-- Use pre and code elements to wrap your code -->
-    <!-- The class "language-xyz" specifies the language of the code -->
-  <pre><code class="language-javascript">
-//ARRAY insertion
+//DFS
 #include <stdio.h>
 
-  void insertion(int numbers[], int loc, int data, int arrayLength)
+#define MAX 10
+
+int stack[MAX], top = -1;
+
+void push(int value)
+{
+  stack[++top] = value;
+}
+
+int pop()
+{
+  return stack[top--];
+}
+
+void DFS(int graph[MAX][MAX], int visited[MAX], int start, int n)
+{
+  push(start);
+
+  while (top != -1)
   {
-    loc = loc - 1;
-    for (int i = arrayLength; i >= loc; i--)
+    int current = pop();
+
+    // If the node is not visited, mark it as visited and print it
+    if (!visited[current])
     {
-      numbers[i + 1] = numbers[i];
+      printf("%d ", current);
+      visited[current] = 1;
     }
-    numbers[loc] = data;
-  }
-  
-  int main()
-  {
-    int numbers[100];
-    int n;
-    int loc;
-    int data;
-  
-    printf("Enter the length of list:\n");
-    scanf("%d", &n);
-    printf("Now enter the numbers:\n");
-  
-    for (int i = 0; i < n; i++)
-    {
-      scanf("%d", &numbers[i]);
-    }
-  
-    printf("Enter the location where you want to insert the new number:\n");
-    scanf("%d", &loc);
-  
-    printf("Enter the  new number:\n");
-    scanf("%d", &data);
-  
-    // INSERTION
-    insertion(numbers, loc, data, n);
-    n = n + 1;
-  
-    for (int i = 0; i < n; i++)
-    {
-      printf("%d  ", numbers[i]);
+
+    // Push all unvisited neighbors onto the stack
+    for (int i = n - 1; i >= 0; i--)
+    { // Reverse order for proper traversal
+      if (graph[current][i] == 1 && visited[i] == 0)
+      {
+        push(i);
+      }
     }
   }
+}
+
+int main()
+{
+  int n;
+  printf("Enter number of nodes: ");
+  scanf("%d", &n);
+
+  int graph[MAX][MAX];
+  int visited[MAX] = {0};
+
+  printf("Enter adjacency matrix:\n");
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = 0; j < n; j++)
+    {
+      scanf("%d", &graph[i][j]);
+    }
+  }
+
+  int start;
+  printf("Enter starting node: ");
+  scanf("%d", &start);
+
+  printf("DFS traversal starting from node %d:\n", start);
+  DFS(graph, visited, start, n);
+
+  return 0;
+}
+
+      </code></pre>
+  </p>
+  <p>
+    <!-- Use pre and code elements to wrap your code -->
+    <!-- The class "language-xyz" specifies the language of the code -->
+  <pre><code class="language-javascript">
+    //MIN MAX recursion
+   
+       
+       
+      #include <stdio.h>
+
+struct Pair
+{
+  int min;
+  int max;
+};
+
+struct Pair findMinMax(int arr[], int low, int high)
+{
+  struct Pair minmax, left, right;
+  int mid;
+
+  if (low == high)
+  {
+    minmax.min = arr[low];
+    minmax.max = arr[low];
+    return minmax;
+  }
+
+  if (high == low + 1)
+  {
+    if (arr[low] < arr[high])
+    {
+      minmax.min = arr[low];
+      minmax.max = arr[high];
+    }
+    else
+    {
+      minmax.min = arr[high];
+      minmax.max = arr[low];
+    }
+    return minmax;
+  }
+
+  mid = (low + high) / 2;
+  left = findMinMax(arr, low, mid);
+  right = findMinMax(arr, mid + 1, high);
+
+  if (left.min < right.min)
+  {
+    minmax.min = left.min;
+  }
+  else
+  {
+    minmax.min = right.min;
+  }
+
+  if (left.max > right.max)
+  {
+    minmax.max = left.max;
+  }
+  else
+  {
+    minmax.max = right.max;
+  }
+
+  return minmax;
+}
+
+int main()
+{
+  int arr[] = {1000, 11, 445, 1, 330, 3000};
+  int n = sizeof(arr) / sizeof(arr[0]);
+  struct Pair minmax = findMinMax(arr, 0, n - 1);
+
+  printf("Minimum element is %d\n", minmax.min);
+  printf("Maximum element is %d\n", minmax.max);
+
+  return 0;
+}
+      
+      </code></pre>
+  </p>
+  <p>
+    <!-- Use pre and code elements to wrap your code -->
+    <!-- The class "language-xyz" specifies the language of the code -->
+  <pre><code class="language-javascript">
+//JOB SEQUENCE
+#include <stdio.h>
+#include <stdbool.h>
+
+struct Job
+{
+  char id;
+  int profit;
+  int deadline;
+};
+
+void sortJobs(struct Job jobs[], int n)
+{
+  // bubble sort the jobs sequence
+}
+
+void jobSequencing(struct Job jobs[], int n)
+{
+  sortJobs(jobs, n);
+  // find  max deadline here..
+  int maxDeadline = 0;
+  for (int i = 0; i <= n; i++)
+  {
+    if (jobs[i].deadline > maxDeadline)
+    {
+      maxDeadline = jobs[i].deadline;
+    }
+  }
+
+  bool slots[3];
+  bool result[4];
+  int totalProfit = 0;
+
+  for (int i = 0; i < maxDeadline; i++)
+  {
+    slots[i] = false;
+  }
+
+  for (int i = 0; i < n; i++)
+  {
+    for (int j = jobs[i].deadline - 1; j >= 0; j--)
+    {
+      if (!slots[j])
+      {
+        slots[j] = true;
+        result[j] = jobs[i].id;
+        totalProfit += jobs[j].profit;
+        break;
+      }
+    }
+  }
+  for (int i = 0; i < maxDeadline; i++)
+  {
+    if (slots[i])
+    {
+      printf("%c", result[i]);
+    }
+  }
+}
+
+int main()
+{
+  struct Job jobs[] = {{"a", 100, 20}, {"b", 30, 100}, {"c", 50, 90}};
+  int n = 3;
+  jobSequencing(jobs, n);
+  return 0;
+}
+
+      </code></pre>
+  </p>
+  <p>
+    <!-- Use pre and code elements to wrap your code -->
+    <!-- The class "language-xyz" specifies the language of the code -->
+  <pre><code class="language-javascript">
+//KNAPSACK PROBLEM
+#include <stdio.h>
+
+// Define a structure to represent an object
+typedef struct
+{
+  int profit;
+  int weight;
+} Object;
+
+// Function to sort objects by profit/weight ratio in descending order
+void sortObjects(Object objects[], int n)
+{
+  for (int i = 0; i < n - 1; i++)
+  {
+    for (int j = 0; j < n - 1 - i; j++)
+    {
+      double ratio1 = (double)objects[j].profit / objects[j].weight;
+      double ratio2 = (double)objects[j + 1].profit / objects[j + 1].weight;
+      if (ratio1 < ratio2)
+      {
+        Object temp = objects[j];
+        objects[j] = objects[j + 1];
+        objects[j + 1] = temp;
+      }
+    }
+  }
+}
+
+// Function to calculate the maximum profit
+double calculateProfit(Object objects[], int n, int bagSize)
+{
+  double profit = 0.0;
+  int i = 0;
+
+  while (bagSize > 0 && i < n)
+  {
+    if (bagSize < objects[i].weight)
+    {
+      profit += ((double)objects[i].profit / objects[i].weight) * bagSize;
+      bagSize = 0;
+    }
+    else
+    {
+      bagSize -= objects[i].weight;
+      profit += objects[i].profit;
+    }
+    i++;
+  }
+
+  return profit;
+}
+
+// Main function
+int main()
+{
+  int bagSize = 15;
+  double profit;
+
+  // Create objects
+  Object objects[] = {
+      {10, 2},
+      {5, 3},
+      {15, 5},
+      {7, 7},
+      {6, 1},
+      {18, 4},
+      {3, 6}};
+
+  int n = sizeof(objects) / sizeof(objects[0]);
+
+  // Sort objects by profit-to-weight ratio
+  sortObjects(objects, n);
+
+  // Calculate maximum profit
+  profit = calculateProfit(objects, n, bagSize);
+
+  // Print the profit
+  printf("The profit is: %.2f\n", profit);
+
+  return 0;
+}
+
   
       </code></pre>
   </p>
@@ -689,51 +447,92 @@
     <!-- Use pre and code elements to wrap your code -->
     <!-- The class "language-xyz" specifies the language of the code -->
   <pre><code class="language-javascript">
-//ARRAY INSERT
+//MERGE SORT
 #include <stdio.h>
 
-  void insertion(int numbers[], int loc, int data, int arrayLength)
+void merge(int arr[], int left, int mid, int right)
+{
+  int i, j, k;
+  int n1 = mid - left + 1;
+  int n2 = right - mid;
+
+  int L[n1], R[n2];
+
+  for (i = 0; i < n1; i++)
+    L[i] = arr[left + i];
+  for (j = 0; j < n2; j++)
+    R[j] = arr[mid + 1 + j];
+
+  i = 0;
+  j = 0;
+  k = left;
+
+  while (i < n1 && j < n2)
   {
-    loc = loc - 1;
-    for (int i = arrayLength; i >= loc; i--)
+    if (L[i] <= R[j])
     {
-      numbers[i + 1] = numbers[i];
+      arr[k] = L[i];
+      i++;
     }
-    numbers[loc] = data;
+    else
+    {
+      arr[k] = R[j];
+      j++;
+    }
+    k++;
   }
-  
-  int main()
+
+  while (i < n1)
   {
-    int numbers[100];
-    int n;
-    int loc;
-    int data;
-  
-    printf("Enter the length of list:\n");
-    scanf("%d", &n);
-    printf("Now enter the numbers:\n");
-  
-    for (int i = 0; i < n; i++)
-    {
-      scanf("%d", &numbers[i]);
-    }
-  
-    printf("Enter the location where you want to insert the new number:\n");
-    scanf("%d", &loc);
-  
-    printf("Enter the  new number:\n");
-    scanf("%d", &data);
-  
-    // INSERTION
-    insertion(numbers, loc, data, n);
-    n = n + 1;
-  
-    for (int i = 0; i < n; i++)
-    {
-      printf("%d  ", numbers[i]);
-    }
+    arr[k] = L[i];
+    i++;
+    k++;
   }
-  
+
+  while (j < n2)
+  {
+    arr[k] = R[j];
+    j++;
+    k++;
+  }
+}
+
+void mergeSort(int arr[], int left, int right)
+{
+  if (left < right)
+  {
+    int mid = left + (right - left) / 2;
+
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
+  }
+}
+
+void printArray(int arr[], int size)
+{
+  int i;
+  for (i = 0; i < size; i++)
+    printf("%d ", arr[i]);
+  printf("\n");
+}
+
+int main()
+{
+  int arr[] = {38, 27, 43, 3, 9, 82, 10};
+  int arr_size = sizeof(arr) / sizeof(arr[0]);
+
+  printf("Given array is: \n");
+  printArray(arr, arr_size);
+
+  mergeSort(arr, 0, arr_size - 1);
+
+  printf("\nSorted array is: \n");
+  printArray(arr, arr_size);
+  return 0;
+}
+
       </code></pre>
   </p>
   <p>
@@ -743,44 +542,135 @@
 //QUICKSORT
 #include <stdio.h>
 
-  void swap(int* a, int* b) {
-      int t = *a;
-      *a = *b;
-      *b = t;
+// Function to partition the array into two halves
+int partition(int arr[], int low, int high)
+{
+  int pivot = arr[high]; // Choose the last element as the pivot
+  int i = low - 1;       // Index for smaller element
+
+  for (int j = low; j < high; j++)
+  {
+    // If the current element is smaller than or equal to the pivot
+    if (arr[j] <= pivot)
+    {
+      i++;
+      // Swap arr[i] and arr[j]
+      int temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
   }
-  
-  int partition (int arr[], int low, int high) {
-      int pivot = arr[high]; 
-      int i = (low - 1); 
-  
-      for (int j = low; j <= high - 1; j++) {
-          if (arr[j] < pivot) {
-              i++; 
-              swap(&arr[i], &arr[j]);
-          }
-      }
-      swap(&arr[i + 1], &arr[high]);
-      return (i + 1);
+
+  // Swap arr[i + 1] and pivot (arr[high])
+  int temp = arr[i + 1];
+  arr[i + 1] = arr[high];
+  arr[high] = temp;
+
+  return i + 1; // Return the partition index
+}
+
+// Function to implement quicksort
+void quickSort(int arr[], int low, int high)
+{
+  if (low < high)
+  {
+    // Partition the array and get the pivot index
+    int pi = partition(arr, low, high);
+
+    // Recursively sort elements before and after partition
+    quickSort(arr, low, pi - 1);
+    quickSort(arr, pi + 1, high);
   }
-  
-  void quickSort(int arr[], int low, int high) {
-      if (low < high) {
-          int pi = partition(arr, low, high);
-          quickSort(arr, low, pi - 1);
-          quickSort(arr, pi + 1, high);
-      }
+}
+
+// Function to print an array
+void printArray(int arr[], int size)
+{
+  for (int i = 0; i < size; i++)
+  {
+    printf("%d ", arr[i]);
   }
-  
-  int main() {
-      int arr[] = {10, 7, 8, 9, 1, 5};
-      int n = sizeof(arr) / sizeof(arr[0]);
-      quickSort(arr, 0, n - 1);
-      printf("Sorted array: \n");
-      for (int i = 0; i < n; i++)
-          printf("%d ", arr[i]);
-      return 0;
+  printf("\n");
+}
+
+// Main function
+int main()
+{
+  int arr[] = {10, 7, 8, 9, 1, 5};
+  int n = sizeof(arr) / sizeof(arr[0]);
+
+  printf("Original array: \n");
+  printArray(arr, n);
+
+  quickSort(arr, 0, n - 1);
+
+  printf("Sorted array: \n");
+  printArray(arr, n);
+
+  return 0;
+}
+
+      </code></pre>
+  </p>
+  <p>
+    <!-- Use pre and code elements to wrap your code -->
+    <!-- The class "language-xyz" specifies the language of the code -->
+  <pre><code class="language-javascript">
+//RECURSIVE MINMAX
+#include <stdio.h>
+
+int findMin(int arr[], int start, int end)
+{
+  if (start == end)
+  {
+    return arr[start];
   }
-  
+  else
+  {
+    int mid = (start + end) / 2;
+    int leftmin = findMin(arr, start, mid);
+    int rightmin = findMin(arr, mid + 1, end);
+
+    if (leftmin < rightmin)
+    {
+      return leftmin;
+    }
+    else
+    {
+      return rightmin;
+    }
+  }
+}
+
+int findMax(int arr[], int start, int end)
+{
+  if (start == end)
+  {
+    return arr[start];
+  }
+  else
+  {
+
+    int mid = (start + end) / 2;
+    int leftMax = findMax(arr, start, mid);
+    int rightMax = findMax(arr, mid + 1, end);
+
+    if (rightMax > leftMax)
+    {
+      return rightMax;
+    }
+    else
+    {
+      return leftMax;
+    }
+  }
+}
+
+int main()
+{
+  int arr[] = {3, 6, 2, 1, 4, 88};
+  printf("%d and %d", findMin(arr, 0, 5), findMax(arr, 0, 5));
+}
       </code></pre>
   </p>
   <p>
